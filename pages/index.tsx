@@ -3,12 +3,21 @@ import { useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import { Select } from "./components/select";
+import { Divisas } from './components/divisas';
 import styles from "../styles/Home.module.css";
+import { client } from '../common';
 
 const TITLE = "Visualizador de Divisas";
 
 const Home: NextPage = () => {
-  const [state, setState] = useState<number>(0);
+  const [state, setState] = useState<any>(0);
+
+
+  const handleSelectChange = (value: string) => {
+    client.send("prices");
+  }
+
+
   return (
     <div className={styles.container}>
       <Head>
@@ -25,7 +34,12 @@ const Home: NextPage = () => {
           { label: "sadsa", value: 2 },
         ]}
         setState={setState}
+        defaultValue="Selecciona tu divisa"
+        onChange={handleSelectChange}
       />
+
+      <Divisas value={state} />
+
     </div>
   );
 };
