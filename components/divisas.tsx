@@ -3,7 +3,7 @@ import type { TotalDivision, Selected } from "../types";
 import { DivisionColors } from "../common";
 import { IconName } from "@fortawesome/fontawesome-svg-core";
 import { Icon } from "./icon";
-import styles from "../../styles/Home.module.css";
+import styles from "../styles/Home.module.css";
 
 interface Props {
   values: TotalDivision;

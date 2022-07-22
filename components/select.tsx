@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from "react";
 import { Options } from "../types";
-import styles from "../../styles/Home.module.css";
+import styles from "../styles/Home.module.css";
 
 interface Props {
   name: string;
