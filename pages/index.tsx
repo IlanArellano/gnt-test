@@ -1,22 +1,53 @@
 import type { NextPage } from "next";
-import { useState } from "react";
+import type { Division, Prices, Options, TotalDivision } from "../types";
+import { useState, useEffect } from "react";
 import Head from "next/head";
-import Image from "next/image";
 import { Select } from "./components/select";
-import { Divisas } from './components/divisas';
+import { Divisas } from "./components/divisas";
 import styles from "../styles/Home.module.css";
-import { client } from '../common';
+import { client, initial } from "../common";
 
-const TITLE = "Visualizador de Divisas";
+const TITLE = "Visualizador de Precios GNT";
 
 const Home: NextPage = () => {
-  const [state, setState] = useState<any>(0);
+  const [list, setList] = useState<Options[]>([]);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [state, setState] = useState<TotalDivision>(initial);
 
+  const handleSelectChange = (value: string) => setSelected(value);
 
-  const handleSelectChange = (value: string) => {
-    client.send("prices");
-  }
+  useEffect(() => {
+    client.onopen = () => {
+      console.log("Connection has been opened!");
+      client.send("prices");
+    };
+    client.onmessage = (message) => {
+      const data: Prices = JSON.parse(message.data as any)?.prices as Prices;
 
+      //Se carga la lista de todas las divisas disponibles para cargarlo en el select
+      if (list.length === 0)
+        setList(
+          Object.keys(data).map((x) => ({
+            label: x,
+            value: x,
+          }))
+        );
+
+      //Verifica si un elemento de la lista haya sido seleccionado y a partir de la seleccion mostraran los respectivos valores
+      if (selected !== null) {
+        const content: Division = data[selected];
+        if (content) {
+          setState((prev) => ({
+            ask: content.ask,
+            bid: content.bid,
+            divisa: content.divisa,
+            prevAsk: prev.ask,
+            prevBid: prev.bid,
+          }));
+        }
+      }
+    };
+  }, [selected]);
 
   return (
     <div className={styles.container}>
@@ -29,17 +60,12 @@ const Home: NextPage = () => {
 
       <Select
         name="Divisas"
-        items={[
-          { label: "sada", value: 1 },
-          { label: "sadsa", value: 2 },
-        ]}
-        setState={setState}
+        items={list}
         defaultValue="Selecciona tu divisa"
         onChange={handleSelectChange}
       />
 
-      <Divisas value={state} />
-
+      <Divisas values={state} />
     </div>
   );
 };

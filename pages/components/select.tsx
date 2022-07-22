@@ -1,34 +1,32 @@
 import React, { ChangeEvent } from "react";
 import { Options } from "../../types";
-import styles from '../../styles/Home.module.css';
+import styles from "../../styles/Home.module.css";
 
 interface Props {
   name: string;
   items: Options[];
-  setState: (state: any) => void;
+  setState?: (state: any) => void;
   onChange?: (value: string) => void;
   label?: string;
   defaultValue?: any;
 }
 
-export function Select(props: Props){
+export function Select(props: Props) {
   const onChange = (evt: ChangeEvent<HTMLSelectElement>) => {
     if (props.onChange !== undefined) props.onChange(evt.target.value);
-
-    console.log({ event: evt });
   };
 
   return (
     <div className={styles.select}>
       {props.label && <label>{props.label}</label>}
-      <select defaultValue={props.defaultValue} name={props.name} onChange={onChange}>
+      <select name={props.name} onChange={onChange}>
         <option selected>{props.defaultValue}</option>
-      {props.items?.map((x, i) => (
-        <option key={i} value={x.value}>
-          {x.label}
-        </option>
-      ))}
-    </select>
+        {props.items?.map((x, i) => (
+          <option key={i} value={x.value}>
+            {x.label}
+          </option>
+        ))}
+      </select>
     </div>
   );
 }
