@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from "react";
-import { Options } from "../../types";
+import { Options } from "../types";
 import styles from "../../styles/Home.module.css";
 
 interface Props {

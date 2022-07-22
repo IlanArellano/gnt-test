@@ -2,8 +2,8 @@ import type { NextPage } from "next";
 import type { Division, Prices, Options, TotalDivision } from "../types";
 import { useState, useEffect } from "react";
 import Head from "next/head";
-import { Select } from "./components/select";
-import { Divisas } from "./components/divisas";
+import { Select } from "../components/select";
+import { Divisas } from "../components/divisas";
 import styles from "../styles/Home.module.css";
 import { client, initial } from "../common";
 
